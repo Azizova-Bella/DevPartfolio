@@ -101,6 +101,7 @@ const Resume = () => {
   >
     <Globe
       className="w-[400px] h-[400px] mr-40 mt-30"
+      // @ts-ignore
       globeConfig={{
         pointSize: 4, // Smaller points for a better compact view
         globeColor: '#1e293b',

@@ -34,6 +34,7 @@ const Skills = () => {
       {/* Icon Grid with Responsiveness */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
 		<IconCloud
+		// @ts-ignore
   icons={Skills.map((icon: JSX.Element, index: number) => (
     <IconStyle key={index} icon={icon} />
   ))}
