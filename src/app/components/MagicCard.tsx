@@ -23,7 +23,7 @@ export function ProjectsShowcase() {
 			tags: ['React', 'TypeScript', 'Tailwind CSS', 'FSD'],
 			codeLink: 'https://github.com/Kholmurod02/instagram',
 			demoLink: 'https://shop-web-next-js-azizova-bella.vercel.app/en',
-			image: '/store.png',
+			image: '/insta.png',
 		},
 	]
 
