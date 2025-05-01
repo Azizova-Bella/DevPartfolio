@@ -206,12 +206,14 @@ const ContactPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-         <HyperText 
-  className="text-5xl sm:text-6xl font-bold mb-4"
-  textGradient="bg-gradient-to-r from-blue-400 to-purple-500"
->
-  Contact Me
-</HyperText>
+     <div className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+  <HyperText 
+    className="text-5xl sm:text-7xl font-extrabold mb-6 tracking-tight leading-tight"
+
+  >
+    Contact Me
+  </HyperText>
+</div>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Have questions? I'm here to help! Reach out through any channel.
           </p>
