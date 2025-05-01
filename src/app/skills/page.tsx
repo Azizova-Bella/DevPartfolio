@@ -7,29 +7,34 @@ import { IconCloud } from "@/components/magicui/icon-cloud"; // Ensure IconCloud
 const skills = [
   { name: "TypeScript", slug: "typescript" },
   { name: "JavaScript", slug: "javascript" },
-  { name: "Dart", slug: "dart" },
-  { name: "Java", slug: "java" },
   { name: "React", slug: "react" },
-  { name: "Flutter", slug: "flutter" },
-  { name: "Android", slug: "android" },
   { name: "HTML5", slug: "html5" },
   { name: "CSS3", slug: "css3" },
-  { name: "Node.js", slug: "nodedotjs" },
-  { name: "Express", slug: "express" },
   { name: "Next.js", slug: "nextdotjs" },
-  { name: "Prisma", slug: "prisma" },
-  { name: "AWS", slug: "amazonaws" },
-  { name: "PostgreSQL", slug: "postgresql" },
-  { name: "Firebase", slug: "firebase" },
-  { name: "Nginx", slug: "nginx" },
-  { name: "Vercel", slug: "vercel" },
-  { name: "Jest", slug: "jest" },
-  { name: "Cypress", slug: "cypress" },
-  { name: "Docker", slug: "docker" },
   { name: "Git", slug: "git" },
   { name: "GitHub", slug: "github" },
-  { name: "GitLab", slug: "gitlab" },
   { name: "Figma", slug: "figma" },
+  { name: "Framer Motion", slug: "framermotion" }, // Animation library
+  { name: "shadcn/ui", slug: "shadcnui" }, // UI components
+  { name: "Jotai", slug: "jotai" }, // State management
+  { name: "BEM", slug: "bem" }, // CSS methodology
+  { name: "OOP", slug: "oop" }, // Programming paradigm
+  { name: "Tailwind CSS", slug: "tailwindcss" }, // Utility-first CSS
+  { name: "Zustand", slug: "zustand" }, // State management
+  { name: "React Query", slug: "tanstackquery" }, // Data fetching
+  { name: "Storybook", slug: "storybook" }, // UI component development
+  { name: "Vite", slug: "vite" }, // Build tool
+  { name: "ESLint", slug: "eslint" }, // Linting
+  { name: "Prettier", slug: "prettier" } ,
+  { name: "SASS/SCSS", slug: "sass" },
+  { name: "Webpack", slug: "webpack" },
+  { name: "Redux", slug: "redux" },
+  { name: "Vercel", slug: "vercel" },
+  { name: "NPM", slug: "npm" },
+  { name: "Bash", slug: "bash" },
+  { name: "REST API", slug: "restapi" },
+  { name: "VS Code", slug: "visualstudiocode" },
+  { name: "Notion", slug: "notion" },
 ];
 
 const Skills = () => {
