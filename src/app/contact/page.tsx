@@ -1,8 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Mail, MapPin, Phone, Send, MessageSquare } from 'lucide-react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { Mail, MapPin, Phone, Send, MessageSquare } from 'lucide-react'
+import axios from 'axios'
+import toast, { Toaster } from 'react-hot-toast'
+import { HyperText } from '@/components/magicui/hyper-text'
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -11,24 +14,115 @@ const ContactPage = () => {
     message: ''
   })
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const sendToTelegram = async (data: typeof formData) => {
+    const botToken = '7766547611:AAGB8SFWPkMlRQ5ZlJ5SfnZ1G1qzVFHUB8A'
+    const chatId = '5462887942'
+    
+    const text = `
+      📩 <b>New Message From Website</b>
+      
+      👤 <b>Name:</b> ${data.name}
+      📧 <b>Email:</b> ${data.email}
+      
+      ✉️ <b>Message:</b>
+      ${data.message}
+    `
+
+    try {
+      await axios.post(
+        `https://api.telegram.org/bot${botToken}/sendMessage`,
+        {
+          chat_id: chatId,
+          text: text,
+          parse_mode: 'HTML'
+        }
+      )
+      return true
+    } catch (error) {
+      console.error('Error sending to Telegram:', error)
+      throw error
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Telegram bot integration
-    const telegramMessage = `New message from ${formData.name} (${formData.email}):%0A%0A${formData.message}`
-    window.open(`https://t.me/TJKGuideBot?start=${telegramMessage}`, '_blank')
-    
-    // Email fallback
-    const mailtoLink = `mailto:azizovabella14@gmail.com?subject=Message from ${formData.name}&body=${formData.message}%0D%0A%0D%0AFrom: ${formData.name}%0D%0AEmail: ${formData.email}`
-    window.location.href = mailtoLink
-    
-    // Reset form
-    setFormData({ name: '', email: '', message: '' })
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error('Please fill all fields', {
+        position: 'top-center',
+        style: {
+          background: '#ef4444',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+        },
+        iconTheme: {
+          primary: '#fff',
+          secondary: '#ef4444',
+        },
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      // Try sending to Telegram first
+      await sendToTelegram(formData)
+      
+      // Show success toast
+      toast.success('Message sent successfully!', {
+        position: 'top-center',
+        duration: 5000,
+        style: {
+          background: '#10b981',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+        },
+        iconTheme: {
+          primary: '#fff',
+          secondary: '#10b981',
+        },
+      })
+
+      // Email fallback
+      const subject = `Message from ${formData.name}`
+      const body = `${formData.message}\n\nFrom: ${formData.name}\nEmail: ${formData.email}`
+      window.location.href = `mailto:azizovabella14@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      
+      // Reset form
+      setFormData({ name: '', email: '', message: '' })
+      
+    } catch (error) {
+      toast.error('Failed to send via Telegram, using email instead', {
+        position: 'top-center',
+        duration: 5000,
+        style: {
+          background: '#ef4444',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+        },
+        iconTheme: {
+          primary: '#fff',
+          secondary: '#ef4444',
+        },
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const containerVariants = {
@@ -55,9 +149,55 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Animated Background Gradient */}
+      <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{
+          top: 40,
+          left: 0,
+          right: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        toastOptions={{
+          success: {
+            duration: 3000,
+            style: {
+              background: '#8b5cf6', 
+              color: '#fff',
+              padding: '16px 24px',
+              borderRadius: '12px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              fontSize: '16px',
+              fontWeight: '500',
+            },
+            iconTheme: {
+              primary: '#fff',
+              secondary: '#10b981',
+            },
+          },
+          error: {
+            duration: 4000,
+            style: {
+              background: '#ef4444',
+              color: '#fff',
+              padding: '16px 24px',
+              borderRadius: '12px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              fontSize: '16px',
+              fontWeight: '500',
+            },
+            iconTheme: {
+              primary: '#fff',
+              secondary: '#ef4444',
+            },
+          },
+        }}
+      />
+
       <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 opacity-50" />
-      
+
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         {/* Header */}
         <motion.div 
@@ -66,9 +206,12 @@ const ContactPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-5xl sm:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-            Contact Me
-          </h1>
+         <HyperText 
+  className="text-5xl sm:text-6xl font-bold mb-4"
+  textGradient="bg-gradient-to-r from-blue-400 to-purple-500"
+>
+  Contact Me
+</HyperText>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Have questions? I'm here to help! Reach out through any channel.
           </p>
@@ -168,7 +311,7 @@ const ContactPage = () => {
                 Phone
               </h3>
               <p className="text-gray-400 mb-3">
-                Available by request
+               +992 991 88 12 05
               </p>
               <span className="text-gray-200">
                 Contact me first
@@ -176,7 +319,6 @@ const ContactPage = () => {
             </motion.div>
           </div>
 
-          {/* Contact Form */}
           <motion.div
             variants={itemVariants}
             transition={{ delay: 0.4 }}
@@ -242,14 +384,27 @@ const ContactPage = () => {
 
               <motion.button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg hover:shadow-blue-500/20"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                disabled={isSubmitting}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg hover:shadow-blue-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
+                whileHover={!isSubmitting ? { scale: 1.02 } : {}}
+                whileTap={!isSubmitting ? { scale: 0.98 } : {}}
               >
-                <Send className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                <span className="group-hover:translate-x-1 transition-transform">
-                  Send Message
-                </span>
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                    <span className="group-hover:translate-x-1 transition-transform">
+                      Send Message
+                    </span>
+                  </>
+                )}
               </motion.button>
             </form>
           </motion.div>
